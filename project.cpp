@@ -18,8 +18,8 @@
 #include "object.h"
 
 
-const int width = 750;
-const int height = 750;
+int width = 1000;
+int height = 750;
 
 
 GLuint compileShader(std::string shaderCode, GLenum shaderType);
@@ -336,15 +336,18 @@ int main(int argc, char* argv[])
 	for (std::pair<std::string, GLenum> pair : facesToLoad) {
 		loadCubemapFace(pair.first.c_str(), pair.second);
 	}
-	
+
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
+		glfwGetFramebufferSize(window, &width, &height);
+		glViewport(0,0, width, height);
+		perspective = camera.GetProjectionMatrix(45, (float)width/height, 0.01, 100);
+
 		view = camera.GetViewMatrix();
 		glfwPollEvents();
 		double now = glfwGetTime();
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
 		shader.use();
 
@@ -353,6 +356,7 @@ int main(int argc, char* argv[])
 		shader.setMatrix4("V", view);
 		shader.setMatrix4("P", perspective);
 		shader.setVector3f("u_view_pos", camera.Position);
+		shader.setFloat("light.ambient_strength", ambient + 0.3);
 
 		shader.setVector3f("materialColour", materialColour1);
 
@@ -362,6 +366,7 @@ int main(int argc, char* argv[])
 		//we do not need shader.use(), nor the view, perspective, view_pos because we are using the same shader for both spheres.
 		shader.setMatrix4("M", model2);
 		shader.setMatrix4("itM", inverseModel2);
+		shader.setFloat("light.ambient_strength", ambient);
 		model2 = glm::translate(model2, glm::vec3(0.1, 0.0, 0.0));
 		model2 = glm::rotate(model2, glm::radians((float)1.0), glm::vec3(0.0, 1.0, 0.0));
 		inverseModel2 = glm::transpose(glm::inverse(model2));
@@ -420,7 +425,7 @@ void loadCubemapFace(const char * path, const GLenum& targetFace)
 
 
 void processInput(GLFWwindow* window) {
-	//3. Use the cameras class to change the parameters of the camera
+	//Use the cameras class to change the parameters of the camera
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
