@@ -1,0 +1,40 @@
+#Template for INFOH502
+#Heavily inspired from https://github.com/Polytonic/Glitter/blob/master/CMakeLists.txt
+
+#project setup
+project(infoh502-project-cpp)
+
+#set the minimal version of cmake and the minimal version of the c++ language
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
+set(CMAKE_CXX_STANDARD 14)     
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+
+
+find_package(OpenGL REQUIRED)
+
+#for glad library
+add_library( glad STATIC 3rdParty/glad/src/glad.c)
+set(GLAD_INCLUDE "3rdParty/glad/include")
+target_include_directories(glad PUBLIC ${GLAD_INCLUDE})
+
+#for GLFW
+option(GLFW_BUILD_DOCS OFF)
+option(GLFW_BUILD_EXAMPLES OFF)
+option(GLFW_BUILD_TESTS OFF)
+add_subdirectory(3rdParty/glfw)
+
+
+
+include_directories(3rdParty/glad/include/
+                    3rdParty/glfw/include/
+                    3rdParty/glm/
+                    3rdParty/stb/)
+
+set(SOURCES_PROJECT "project.cpp" "camera.h" "shader.h" "object.h")
+
+add_compile_definitions(PATH_TO_OBJECTS="${CMAKE_CURRENT_SOURCE_DIR}/objects")
+add_compile_definitions(PATH_TO_TEXTURE="${CMAKE_CURRENT_SOURCE_DIR}/textures")
+
+add_executable(${PROJECT_NAME} ${SOURCES_PROJECT})
+target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::GL glfw glad)
