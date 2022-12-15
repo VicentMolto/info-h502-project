@@ -322,15 +322,15 @@ int main(int argc, char* argv[])
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//This is the image you will use as your skybox
-	std::string pathToCubeMap = PATH_TO_TEXTURE "/cubemaps/yokohama3/";
+	std::string pathToCubeMap = PATH_TO_TEXTURE "/cubemaps/corona/";
 
 	std::map<std::string, GLenum> facesToLoad = { 
-		{pathToCubeMap + "posx.jpg",GL_TEXTURE_CUBE_MAP_POSITIVE_X},
-		{pathToCubeMap + "posy.jpg",GL_TEXTURE_CUBE_MAP_POSITIVE_Y},
-		{pathToCubeMap + "posz.jpg",GL_TEXTURE_CUBE_MAP_POSITIVE_Z},
-		{pathToCubeMap + "negx.jpg",GL_TEXTURE_CUBE_MAP_NEGATIVE_X},
-		{pathToCubeMap + "negy.jpg",GL_TEXTURE_CUBE_MAP_NEGATIVE_Y},
-		{pathToCubeMap + "negz.jpg",GL_TEXTURE_CUBE_MAP_NEGATIVE_Z},
+		{pathToCubeMap + "corona_rt.png",GL_TEXTURE_CUBE_MAP_POSITIVE_X}, //right
+		{pathToCubeMap + "corona_up.png",GL_TEXTURE_CUBE_MAP_POSITIVE_Y}, //up ok
+		{pathToCubeMap + "corona_bk.png",GL_TEXTURE_CUBE_MAP_POSITIVE_Z}, //back
+		{pathToCubeMap + "corona_lf.png",GL_TEXTURE_CUBE_MAP_NEGATIVE_X}, //left
+		{pathToCubeMap + "corona_dn.png",GL_TEXTURE_CUBE_MAP_NEGATIVE_Y}, //down
+		{pathToCubeMap + "corona_ft.png",GL_TEXTURE_CUBE_MAP_NEGATIVE_Z}, //front
 	};
 	//load the six faces, you need to complete the function
 	for (std::pair<std::string, GLenum> pair : facesToLoad) {
