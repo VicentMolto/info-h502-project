@@ -9,8 +9,8 @@
 #include "src/Importer.h"
 
 // Set camera parameters
-const int w = 800;
-const int h = 600;
+const int w = 1680;
+const int h = 1400;
 Camera camera(45, 10, .1,vec3(2,3,25));
 
 
@@ -61,7 +61,7 @@ int main()
 
 
     
-    Import("18.2dian.obj");
+    Import("18.4.obj");
     ImportData vertex(vertices, indices, prop, propSize); // read the vertices
     
     
@@ -138,9 +138,10 @@ int main()
     glVertexAttribDivisor(5, 1);
     glVertexAttribDivisor(6, 1);
 
-    // glBindVertexArray(1);
+    // glBindVertexArray(0);
     //Instancing ends here.
     
+
 
 
 
@@ -150,12 +151,20 @@ int main()
     Shader shader_skybox("shaderFolder/sky.vs", "shaderFolder/sky.fs");
     Shader shader_instancing("shaderFolder/asteroid.vs","shaderFolder/basic.fs");
     Shader shader_geometry("shaderFolder/geo.vs", "shaderFolder/geo.fs", "shaderFolder/geo.gs");
+    Shader shader_grass("shaderFolder/grass.vs","shaderFolder/grass.fs");
     // create objects (meshes)
     Meshes bunny_big = Meshes_OK[0];
     Meshes cube = Meshes_OK[1];
-    Meshes mars= Meshes_OK[2];
-    Meshes ship = Meshes_OK[4];
-    Meshes cube1 = Meshes_OK[6];
+    Meshes cube1 = Meshes_OK[2];
+    Meshes cube2= Meshes_OK[3];
+    Meshes cube3 = Meshes_OK[4]; //asteroid
+
+    Meshes mars= Meshes_OK[5];
+    Meshes ship = Meshes_OK[6];
+    // defaut is a part of ship
+    Meshes sky = Meshes_OK[8];
+    Meshes grass = Meshes_OK[9];
+    Meshes window_object = Meshes_OK[10];
     
 
 
@@ -220,7 +229,7 @@ int main()
         basicShader.setMat4("P", P);
         basicShader.setVec3("camPos", camera.cameraPos);
 
-        for (int i = 0; i < 3 ; i++)
+        for (int i = 0; i < 6 ; i++)
         {
 
 
@@ -244,6 +253,27 @@ int main()
             }
 
         }
+        //Draw grass
+        // glEnable(GL_BLEND);
+        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        shader_grass.use();
+        shader_grass.setMat4("V", V);
+        shader_grass.setMat4("P", P);
+        shader_grass.setVec3("camPos", camera.cameraPos);
+        shader_grass.setInt("t0", getTexID(textures, mats[grass.matID].diff)+1);
+        Draw(grass, shader_grass,M, pos[0],
+                -90, vec3(10, 0, 0));
+
+        //Draw window
+        shader_grass.use();
+        shader_grass.setMat4("V", V);
+        shader_grass.setMat4("P", P);
+        shader_grass.setVec3("camPos", camera.cameraPos);
+        shader_grass.setInt("t0", getTexID(textures, mats[window_object.matID].diff)+1);
+        Draw(window_object, shader_grass,M, pos[0],
+                -90, vec3(20, 0, 0));
+
+
 
         //Draw ship
         shader1.use();
@@ -259,6 +289,7 @@ int main()
             pos[4],
             -90, vec3(1, 0, 0)
         );
+
 
         //Draw the normals(geometry shader) of  the cube
         shader_geometry.use();
@@ -285,7 +316,7 @@ int main()
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
         shader_skybox.setInt("t0", 0);
-        Draw(Meshes_OK[3], shader_skybox, M);
+        Draw(sky, shader_skybox, M);
 
         glDepthFunc(GL_LESS);
 
@@ -300,7 +331,7 @@ int main()
         shader_instancing.setMat4("V", V);
         shader_instancing.setMat4("P", P);
         shader_instancing.setInt("t0", 4);
-        glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(Meshes_OK[8].vID), GL_UNSIGNED_INT, (void*)(Meshes_OK[7].vOffset * sizeof(float)), amount);
+        glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(Meshes_OK[8].vID), GL_UNSIGNED_INT, (void*)(cube3.vOffset * sizeof(float)), amount);
 
 
         glfwPollEvents();
