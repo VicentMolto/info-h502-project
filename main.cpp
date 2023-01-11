@@ -61,17 +61,10 @@ int main()
 
 
     
-    Import("18.4.obj");
+    Import("0111final.obj");
     ImportData vertex(vertices, indices, prop, propSize); // read the vertices
     
-    
-    // read all the textures
-    // for (int i = 0; i < textures.size(); i++)
-    // {
-    //     Texture(textures[i].c_str(), i + 1, true);
-    // }
-
-    // transform matrix
+    //transform matrix
     mat4 M(1);
     mat4 V(1);
     mat4 P(1);
@@ -79,7 +72,7 @@ int main()
     //Instancing starts from here:
     srand(static_cast<unsigned int>(glfwGetTime()));// initialise the random seed
     float radius = 30.0;
-    int amount = 10000;
+    int amount = 100000;
     float offset = 10;
 
     mat4* modelMatrices;
@@ -153,24 +146,15 @@ int main()
     Shader shader_geometry("shaderFolder/geo.vs", "shaderFolder/geo.fs", "shaderFolder/geo.gs");
     Shader shader_grass("shaderFolder/grass.vs","shaderFolder/grass.fs");
     // create objects (meshes)
-    Meshes bunny_big = Meshes_OK[0];
-    Meshes cube = Meshes_OK[1];
-    Meshes cube1 = Meshes_OK[2];
-    Meshes cube2= Meshes_OK[3];
-    Meshes cube3 = Meshes_OK[4]; //asteroid
+    Meshes sky = Meshes_OK[0];
+    Meshes mars= Meshes_OK[1];
+    Meshes asteroid = Meshes_OK[2]; //asteroid
+    Meshes ship = Meshes_OK[3];
+    // defaut is a part of ship and it's supposed to be 4, but here we just ignore it.
+    Meshes grass = Meshes_OK[5];
+    Meshes window_object = Meshes_OK[6];
+    Meshes cube_normal = Meshes_OK[7];
 
-    Meshes mars= Meshes_OK[5];
-    Meshes ship = Meshes_OK[6];
-    // defaut is a part of ship
-    Meshes sky = Meshes_OK[8];
-    Meshes grass = Meshes_OK[9];
-    Meshes window_object = Meshes_OK[10];
-    
-
-
-    // mat4 M(1);
-    // mat4 V(1);
-    // mat4 P(1);
 
 
     vector<std::string> faces
@@ -186,6 +170,7 @@ int main()
     unsigned int cubemapTexture = loadCubemap(faces);
 
 
+ 
     // load the all the textures
     for (int i = 0; i < textures.size(); i++)
     {
@@ -200,8 +185,17 @@ int main()
     }
 
     // to see how many objects are loaded:
-    print("The number of objects in the scene:"); // Just to tell you vicent: one .obj file may contain several objects, for example a nanosuit.obj contains his arm, leg, body....
-    print(Meshes_OK.size());
+    print("The number of objects in the scene:"<<Meshes_OK.size()); //we may print 8 objects but in the scene there's only 7 objects, because i ignored a part of ship.
+    // test: to see if texture id corresponds correctly
+    print("Texture id for grass is:"<<getTexID(textures,"objectFolder/grass/grass.png"));
+    print("test"<<getTexID(textures, mats[grass.matID].diff));
+
+
+
+
+
+
+
 
     float angle = 0.0f; // used for geometry shader
     while (!glfwWindowShouldClose(window)) {
@@ -213,49 +207,51 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         V = camera.getV();
         P = perspective(radians(camera.fov), (float)(w / h), 0.1f, 100.0f);
-            
-
-
-
-
-
+      
         // draw the scene 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-        //Draw first object to third object
+        //I draw here objects separately since they use different shader. For the objects using the same shader, we can draw them in a loop.
+     
+        //Draw the cube then below i can draw its normal lines.
         basicShader.use();
         basicShader.setMat4("V", V);
         basicShader.setMat4("P", P);
         basicShader.setVec3("camPos", camera.cameraPos);
+        basicShader.setInt("t0", 4);
 
-        for (int i = 0; i < 6 ; i++)
-        {
+        Draw(cube_normal, basicShader,M, pos[0],
+                -90, vec3(20, 0, 0));
+
+        //Draw the normals(geometry shader) of  the cube
+        shader_geometry.use();
+        shader_geometry.setMat4("V", V);
+        shader_geometry.setMat4("P", P);
+        shader_geometry.setFloat("time", static_cast<float>(glfwGetTime()));
+       
+        Draw(cube_normal, shader_geometry, M,
+            vec3(0, 0, 0),
+            angle, vec3(1, 0, 0),
+            vec3(.5, .5, 5)
+        );
 
 
-            int matID = Meshes_OK[i].matID;
-            int texID = getTexID(textures, mats[matID].diff);
-            basicShader.setInt("t0", texID+1);
-            if(i==1)
-            {
-                Draw(Meshes_OK[i], basicShader, M,
-                    vec3(0,0,0),
-                    angle, vec3(1, 0, 0),
-                    vec3(.5,.5,5)
-                );
-            }
-            else {
-           
-            Draw(Meshes_OK[i], basicShader, M,
-                pos[i],
-                -90, vec3(1, 0, 0)
-            );
-            }
 
-        }
-        //Draw grass
-        // glEnable(GL_BLEND);
-        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //Draw the mars
+        basicShader.use();
+        basicShader.setMat4("V", V);
+        basicShader.setMat4("P", P);
+        basicShader.setVec3("camPos", camera.cameraPos);
+        basicShader.setInt("t0", getTexID(textures, mats[mars.matID].diff)+1);
+
+        Draw(mars, basicShader,M, pos[0],
+                -90, vec3(20, 0, 0));
+
+
+
+  
+        //Draw the grass
         shader_grass.use();
         shader_grass.setMat4("V", V);
         shader_grass.setMat4("P", P);
@@ -264,50 +260,36 @@ int main()
         Draw(grass, shader_grass,M, pos[0],
                 -90, vec3(10, 0, 0));
 
-        //Draw window
+        //Draw the window
         shader_grass.use();
         shader_grass.setMat4("V", V);
         shader_grass.setMat4("P", P);
         shader_grass.setVec3("camPos", camera.cameraPos);
         shader_grass.setInt("t0", getTexID(textures, mats[window_object.matID].diff)+1);
+
         Draw(window_object, shader_grass,M, pos[0],
                 -90, vec3(20, 0, 0));
 
 
 
-        //Draw ship
+        //Draw the ship
         shader1.use();
         shader1.setMat4("V", V);
         shader1.setMat4("P", P);
         shader1.setVec3("camPos", camera.cameraPos);
+        shader1.setInt("t0", getTexID(textures, mats[ship.matID].diff)+1);
 
-
-        int matID = ship.matID;
-        int texID = getTexID(textures, mats[matID].diff);
-        shader1.setInt("t0", texID+1);
         Draw(ship, shader1, M,
             pos[4],
             -90, vec3(1, 0, 0)
         );
 
 
-        //Draw the normals(geometry shader) of  the cube
-        shader_geometry.use();
-        shader_geometry.setMat4("V", V);
-        shader_geometry.setMat4("P", P);
-        shader_geometry.setFloat("time", static_cast<float>(glfwGetTime()));
-       
-        Draw(cube, shader_geometry, M,
-            vec3(0, 0, 0),
-            angle, vec3(1, 0, 0),
-            vec3(.5, .5, 5)
-        );
+
 
         glEnable(GL_BLEND);
-
-        // draw the skybox
         glDepthFunc(GL_LEQUAL);
-
+        // draw the skybox
         shader_skybox.use();
         V = glm::mat4(glm::mat3(camera.getV()));
         shader_skybox.setMat4("V", V);
@@ -330,8 +312,8 @@ int main()
 
         shader_instancing.setMat4("V", V);
         shader_instancing.setMat4("P", P);
-        shader_instancing.setInt("t0", 4);
-        glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(Meshes_OK[8].vID), GL_UNSIGNED_INT, (void*)(cube3.vOffset * sizeof(float)), amount);
+        shader_instancing.setInt("t0", 5);
+        glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(asteroid.vID), GL_UNSIGNED_INT, (void*)(asteroid.vOffset * sizeof(float)), amount);
 
 
         glfwPollEvents();

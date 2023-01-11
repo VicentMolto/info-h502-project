@@ -9,14 +9,15 @@ struct Vertex {
 	vec2 UV;
 };
 
-//	Vertex(  顶点数组,  size,  面ID数组,  size,  属性长度数组,  size  )
+//	Vertex(  vertex_array,  size,  faceid_array,  size,  propertylenth_array,  size  )
 class ImportData {
 private:
 	unsigned int  VBO, EBO;
 public:	
 	unsigned int VAO;
 	int sumProp = 0;
-	//	Vertex(  顶点数组,  size,  面ID数组,  size,  属性长度数组,  size  )
+
+//	Vertex(  vertex_array,  size,  faceid_array,  size,  propertylenth_array,  size  )
 	ImportData(vector<Vertex> vertices, vector<unsigned int> indices,int prop[],int propSize) {
 		
 		// ---- VAO, VBO, EBO ----
@@ -24,14 +25,14 @@ public:
 		glGenBuffers(1, &VBO);
 		glGenBuffers(1, &EBO);
 
-		glBindVertexArray(VAO);	// 绑定 VAO 
-		glBindBuffer(GL_ARRAY_BUFFER, VBO); // 绑定VBO
+		glBindVertexArray(VAO);	// bind VAO 
+		glBindBuffer(GL_ARRAY_BUFFER, VBO); //bind VBO
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);// 绑定 EBO 
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);// bind EBO 
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
-		// 属性Size 累加		
+		// prop Size addition	
 		int* propOffset = new int[propSize];
 		int temp = 0;
 		for (int i = 0; i < propSize; i++)
@@ -64,7 +65,7 @@ public:
 		glEnableVertexAttribArray(pId);
 	}
 
-	// 释放/删除之前的分配的资源
+	// delete buffer
 	void deleteBuffer() {
 		glDeleteVertexArrays(1, &VAO);
 		glDeleteBuffers(1, &VBO);

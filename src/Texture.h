@@ -6,26 +6,26 @@
 
 
 //void Texture(const char* texPath, int id, bool flip, unsigned char* data) {
-// (  ÌùÍ¼µØÖ·,  ÎÆÀíµ¥Ôª,  ·­×ª?  )
+// (  ï¿½ï¿½Í¼ï¿½ï¿½Ö·,  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôª,  ï¿½ï¿½×ª?  )
 void Texture(const char* texPath, int id, bool flip) {
 		unsigned int texture1;
 		int width, height, nrChannels;
-		// ÌùÍ¼Êý¾ÝÖ¸Õë
+		// ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
 		static unsigned char* data;
 		// T1
 
 		glGenTextures(1, &texture1);
 		stbi_set_flip_vertically_on_load(flip);
-		glActiveTexture(GL_TEXTURE0 + id); //¼¤»î ÎÆÀíµ¥Ôª
-		glBindTexture(GL_TEXTURE_2D, texture1); // °ó¶¨ Texture_2D
+		glActiveTexture(GL_TEXTURE0 + id); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôª
+		glBindTexture(GL_TEXTURE_2D, texture1); // ï¿½ï¿½ Texture_2D
 
-		// Îªµ±Ç°°ó¶¨µÄÎÆÀí¶ÔÏóÉèÖÃ»·ÈÆ¡¢¹ýÂË·½Ê½
+		// Îªï¿½ï¿½Ç°ï¿½ó¶¨µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Æ¡ï¿½ï¿½ï¿½ï¿½Ë·ï¿½Ê½
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		// ¼ÓÔØ²¢Éú³ÉÎÆÀí
+		// ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		data = stbi_load(texPath, &width, &height, &nrChannels, 0);
 		if (data)
@@ -41,7 +41,7 @@ void Texture(const char* texPath, int id, bool flip) {
 		{
 			std::cout << "No successfully loaded >> " << texPath  << std::endl;
 		}
-		// ÊÍ·Å Ö¸Õë (ÌùÍ¼Êý¾Ý)
+		// ï¿½Í·ï¿½ Ö¸ï¿½ï¿½ (ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½)
 		stbi_image_free(data);
 
 	}

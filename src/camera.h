@@ -23,7 +23,7 @@ public:
 		this->cameraPos = cameraPos;
 	}
 
-	// 键盘
+	// keyboard
 	void processInput(GLFWwindow* window)
 	{
 		float currentFrame = glfwGetTime();
@@ -46,7 +46,7 @@ public:
 	}
 
 
-	// 鼠标Pos
+	// mousePos
 	void mousePos(double xpos, double ypos)
 	{
 		if (firstMouse)

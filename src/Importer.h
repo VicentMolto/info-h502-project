@@ -19,13 +19,13 @@ struct Material {
     string norm;
 };
 
-vector<string> textures;// 存放fbx里的所有贴图, (准备状态) .
+vector<string> textures;// put all the textures registered in obj file(or fbx file).
 vector<vec3> pos;
-vector<Material> mats; // 存放FBX 里的所有材质 , (材质所对应的贴图 )
+vector<Material> mats; // put all the materials........
 vector<Meshes> Meshes_OK;
 vector<Vertex> vertices;
 vector<unsigned int> indices;
-// -- 属性的长度 --
+// -- property lenth--
 int prop[] = { 3 ,3,2 };
 int propSize = sizeof(prop) / sizeof(prop[0]);
 
@@ -44,7 +44,7 @@ void Import(const std::string& pFile)
     {
         print(importer.GetErrorString());
     }
-    //print("导入成功!");
+    //print("loaded with sucess!");
 
     aiNode* rootNode = scene->mRootNode;
     for (int i = 0; i < rootNode->mNumChildren; i++)
@@ -57,7 +57,7 @@ void Import(const std::string& pFile)
 
     }
 
-    // 获取 aiMeshes
+    // get aiMeshes
     int aiMeshes = scene->mNumMeshes;
 
 
@@ -69,7 +69,7 @@ void Import(const std::string& pFile)
     {
         aiMesh* mesh = scene->mMeshes[i];
         //print(mesh->mName.C_Str());
-        print(mesh->mName.C_Str() << ": \n" << "顶点数量 = " << mesh->mNumVertices);
+        print(mesh->mName.C_Str() << ": \n" << "vertex number = " << mesh->mNumVertices);
         // 顶点数据
         for (int i = 0; i < mesh->mNumVertices; i++)
         {
@@ -111,24 +111,24 @@ void Import(const std::string& pFile)
 
 
     print("----------");
-    cout << "vertices 数量:" << vertices.size() << endl;
-    cout << "indices 数量:" << indices.size() << endl;
+    cout << "vertices number:" << vertices.size() << endl;
+    cout << "indices number:" << indices.size() << endl;
 
 
     
 
 
-    // 获取贴图
+    // get the textures
     aiString texPath;
     int numMat = scene->mNumMaterials;
     aiTextureType texType[] = { aiTextureType_DIFFUSE ,aiTextureType_SPECULAR,aiTextureType_HEIGHT };
-    string texTypeStr[] = { "颜色","高光","法线" };
+    string texTypeStr[] = { "color ","high light ","normal " };
     string defultTex[] = { "white.jpg","black.jpg","normal.jpg" };
     string* p;
     for (int i = 0; i < numMat; i++)
     {
         aiMaterial* mat = scene->mMaterials[i];
-        printf("第%i个材质:\n", i);
+        printf("%ith material :\n", i);
         Material tempMat; // 临时的 mat 结构体
         p = &tempMat.diff;
 
@@ -140,12 +140,12 @@ void Import(const std::string& pFile)
             string tex = texPath.C_Str();
             if (tex.size() > 0) {
                 (*p++) =  tex;
-                print(texTypeStr[j] << "贴图:" <<  tex);
+                print(texTypeStr[j] << "texture:" <<  tex);
                 textures.push_back( tex);
             }
             else {
                 (*p++) = defultTex[j];
-                print(texTypeStr[j] << "贴图:" << defultTex[j]);
+                print(texTypeStr[j] << "texture:" << defultTex[j]);
             }
         }
         mats.push_back(tempMat);
@@ -165,7 +165,7 @@ void Import(const std::string& pFile)
         textures.insert(textures.begin(), defultTex[len(defultTex) - i - 1]);
     }
 
-    print("待导入区贴图数: " << textures.size());
+    print("the number of textures waiting for loading: " << textures.size());
     for (int i = 0; i < textures.size(); i++)
     {
         print(textures[i]);
@@ -173,4 +173,3 @@ void Import(const std::string& pFile)
 
     // return indices;
 }
-

@@ -1,6 +1,6 @@
 #version 330 core
 
-out vec4 FragColor; // 输出为 vec4 
+out vec4 FragColor; // 
 
 in vec3 Normal;
 in vec2 UV;
