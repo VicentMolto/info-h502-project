@@ -9,7 +9,7 @@ https://github.com/assimp/assimp
 Then just put it in the folder
 
 List to do:
-1. Mirror object v
+1. Mirror object x        Transparent obejct v
 2. Particle system x
 3. Bump mapping x
 4. Simple animation (key buffer) x
