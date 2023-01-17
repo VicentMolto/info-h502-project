@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glad/glad.h>; // 包含glad来获取所有的必须OpenGL头文件
+#include <glad/glad.h>; // include all headfiles for OPENGL
 
 #include <iostream>
 #include <string>
@@ -14,7 +14,7 @@
 
 
 
-//(  vs路径,  fs路径 , gs路径 )
+//(  vs path,  fs path , gs path)
 class Shader
 {
 public:
@@ -31,9 +31,9 @@ public:
 
 		// ----VS----
 		unsigned int vertexShader;
-		vertexShader = glCreateShader(GL_VERTEX_SHADER); // 创建Shader
-		string vertShaderSrc = loadShaderSrc(vs); //读取glsl 到 vertShaderSrc
-		const GLchar* vertShader = vertShaderSrc.c_str(); // 把 string转换为 GLchar 
+		vertexShader = glCreateShader(GL_VERTEX_SHADER); // create Shader
+		string vertShaderSrc = loadShaderSrc(vs); //read glsl into vertShaderSrc
+		const GLchar* vertShader = vertShaderSrc.c_str(); // convert string into GLchar 
 		glShaderSource(vertexShader, 1, &vertShader, NULL);
 		glCompileShader(vertexShader);
 
@@ -63,19 +63,19 @@ public:
 
 		}
 
-		// ----连接 VS 和 PS----
+		// ----connect VS and fs----
 		
-		ID = glCreateProgram();	// 创建 program
-		glAttachShader(ID, vertexShader);	//	附加 VS
-		glAttachShader(ID, fragmentShader); // 附加 PS
+		ID = glCreateProgram();	// create program
+		glAttachShader(ID, vertexShader);	//	add VS
+		glAttachShader(ID, fragmentShader); // add fS
 		if (gs != nullptr)
 		{
-			glAttachShader(ID, geometryShader); // 附加 PS
+			glAttachShader(ID, geometryShader); // add fS
 		}
-		glLinkProgram(ID);	// 链接 
+		glLinkProgram(ID);	// link
 		checkError(ID, "program");
 
-		// ----清除Shader----
+		// ----clear Shader----
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
 		if (gs != nullptr)
@@ -84,32 +84,32 @@ public:
 		}
 	}
 
-	// ---- 读取 Shader 文件 ----
+	// ---- read Shader file ----
 	string loadShaderSrc(const char* filePath)
 	{
-		ifstream file;		 // 创建文件
-		stringstream buf;	// 创建文件buf
-		string ret = "";	// 读取文件到 ret;
+		ifstream file;		 // create file
+		stringstream buf;	// create file buf
+		string ret = "";	// create file to ret;
 
 		file.open(filePath);
 
 		if (file.is_open()) {
-			buf << file.rdbuf(); // 把文件读取到buf
-			ret = buf.str();	// 把buf 里的字符 给 ret
+			buf << file.rdbuf(); // read into buf
+			ret = buf.str();	// read strings of buf into ret
 		}
 		else {
 			cout << "Could not open " << filePath << endl;
 		}
-		file.close();	// 关闭文件
+		file.close();	// close
 
 		return ret;
 	}
 
-	// -- 使用shader --
+	// -- use shader --
 	void use()
 	{
 		glUseProgram(ID);
-		//cout << "Shader 使用成功!!" << endl;
+		//cout << "Shader sucessfully!!" << endl;
 	}
 
 	void setBool(const string& name, bool value) const
@@ -162,7 +162,7 @@ private:
 			if (!success)
 			{
 				glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << type << " Shader 编译错误!!!" << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+				std::cout << type << " Shader compiling wrongly!!!" << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
 			}
 		}
 		else
@@ -171,7 +171,7 @@ private:
 			if (!success)
 			{
 				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << type << "Shader 编译错误!!!"  <<   "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+				std::cout << type << "Shader compiling wrongly!!!"  <<   "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
 			}
 		}
 	}

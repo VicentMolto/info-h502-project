@@ -4,7 +4,7 @@ out vec4 FragColor;
 in vec2 UV;
 in vec3 Normal;
 in vec3 posWS;
-uniform vec3 lPos = vec3(10,20,30);
+uniform vec3 lPos = vec3(0,0,0);
 uniform sampler2D t0;
 
 

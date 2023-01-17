@@ -8,7 +8,7 @@ in vec3 posWS;
 
 uniform sampler2D t0;
 uniform sampler2D t1;
-uniform vec3 lPos = vec3(10,20,30);
+uniform vec3 lPos = vec3(0,0,0);
 uniform vec3 color;
 uniform vec3 camPos;
 
@@ -39,7 +39,7 @@ void main() {
 	spec = pow(spec,5);
 	float depth = LinearizeDepth(gl_FragCoord.z)/far;
 	FragColor = vec4(vec3(depth),1);
-	if(t0.a < 0.5)
+	if(t0.a < 0.2)
        discard;
 	 FragColor = vec4(t0*NoL);	
 

@@ -7,8 +7,8 @@ float vertices[] = {
 		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
 };
 
-unsigned int indices[] = { // 注意索引从0开始! 
-	0, 1, 2, // 第一个三角形
+unsigned int indices[] = { // attention!!! index starts from 0
+	0, 1, 2, // 1st triangle
 	2,3,0
 };
 

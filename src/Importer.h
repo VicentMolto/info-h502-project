@@ -1,5 +1,5 @@
 #pragma once
-#include "..\xhl.h"
+#include "../xhl.h"
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
@@ -84,7 +84,7 @@ void Import(const std::string& pFile)
         //面ID
         int faces = mesh->mNumFaces;
 
-        print("indices 数量=" << faces * 3);
+        print("indices number=" << faces * 3);
         print("indices 偏移量=" << SumIndices);
         print("材质ID = " << mesh->mMaterialIndex);
 

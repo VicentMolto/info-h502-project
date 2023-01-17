@@ -32,9 +32,11 @@ include_directories(assimp-master/include/)
 include_directories(3rdParty/glad/include/
                     3rdParty/glfw/include/
                     3rdParty/glm/
-                    3rdParty/stb/)
+                    3rdParty/stb/)     
+                    
+#irrKlang
+#add_compile_options(-I"${CMAKE_CURRENT_SOURCE_DIR}/irrKlang/include" -L"/usr/lib" ${CMAKE_CURRENT_SOURCE_DIR}/irrKlang/bin/linux-gcc-64/libIrrKlang.so -pthread)
 
-        
 
 # set(SOURCES_PROJECT "main.cpp")
 set(SOURCES_PROJECT "main.cpp")
@@ -50,7 +52,6 @@ add_library(
 set(STB_INCLUDE "3rdParty/stb")
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(stb_image PUBLIC ${STB_INCLUDE})
-
 
 add_executable(${PROJECT_NAME} ${SOURCES_PROJECT})
 target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::GL glfw glad stb_image assimp)
