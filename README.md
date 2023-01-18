@@ -12,7 +12,7 @@ Implemented elements:
   - Instancing.  
   - Geometry shader for drawing the normals.  
   - Geometry shader for "exploding" objects.  
-  - Model importing.  
+  - Model importing using Assimp library.  
   - Texturing.  
   - Transparent shading.  
   - Translucid shading.  
