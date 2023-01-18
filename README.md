@@ -22,3 +22,4 @@ Implemented elements:
   - Skybox.  
   
 To run it, simply download it and build it with CMake.
+It runs properly on Windows and Linux. We were not able to run it on Mac because it seems Apple's compiler does not work properly with the Assimp importing library.
