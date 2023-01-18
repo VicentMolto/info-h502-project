@@ -18,7 +18,7 @@ Implemented elements:
   - Translucid shading.  
   - Reflective shading.  
   - Refractive shading.  
-  - Mouse control.  
+  - Mouse and keyboard control.  
   - Skybox.  
   
 To run it, simply download it and build it with CMake.
